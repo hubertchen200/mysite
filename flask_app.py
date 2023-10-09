@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, flash, redirect,url_for
 from users import create_user, verify_user
 # import datetime
+import git
 
 app = Flask(__name__)
 
@@ -62,16 +63,14 @@ def login():
 
     return render_template('login.html')
 
-
-# print(verify_user('aaa', 'bbb'))
-
-app.route('/update_server/', methods=['POST'])
+@app.route('/api/git', methods=['GET', 'POST'])
 def webhook():
-        if request.method == 'POST':
-            repo = git.Repo('/home/hubertchen200/mysite')
-            origin = repo.remotes.origin
-            origin.pull()
-            return 'Updated PythonAnywhere successfully', 200
-        else:
-            return 'Wrong event type', 400
+    if request.method == 'POST':
+        repo = git.Repo('/home/hubertchen200/mysite')
+        origin = repo.remotes.origin
+        origin.pull()
+        return 'Updated PythonAnywhere successfully', 200
+    else:
+        return 'Wrong event type', 400
+    return "Get"
 
